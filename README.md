@@ -38,3 +38,6 @@ CLAUDE_CONFIG_DIR=/tmp/tm-demo/claude CODEX_HOME=/tmp/tm-demo/codex COPILOT_DB=/
 ```
 
 `og.png` is rendered the same way from a small HTML card. `demo.gif` is copied from the main repo's `docs/`.
+## Search engines
+
+`npm run indexnow` pings Bing, Yandex, Naver and Seznam (IndexNow) with every URL in the sitemap. Run it after a deploy that adds or changes pages. Google ignores IndexNow; submit the sitemap once in Search Console and it re-crawls on its own.
