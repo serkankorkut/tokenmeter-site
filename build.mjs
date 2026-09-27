@@ -21,6 +21,7 @@ const app = {
 const website = { "@type": "WebSite", "@id": `${site}/#website`, name: "Tokenmeter", url: `${site}/`, inLanguage: "en" };
 const layout = readFileSync("src/layout.html", "utf8");
 const logo = readFileSync("src/logo.svg", "utf8");
+const mark = readFileSync("src/mark.svg", "utf8");
 rmSync("public", { recursive: true, force: true });
 cpSync("src/static", "public", { recursive: true });
 const urls = [];
@@ -48,7 +49,8 @@ for (const file of readdirSync("src/pages")) {
     .replace("{{jsonld}}", JSON.stringify({ "@context": "https://schema.org", "@graph": graph }))
     .replaceAll(`<a href="${path}"`, `<a href="${path}" aria-current="page"`)
     .replace("{{content}}", content)
-    .replaceAll("{{logo}}", logo);
+    .replaceAll("{{logo}}", logo)
+    .replaceAll("{{mark}}", mark);
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, html);
   if (slug !== "404") urls.push(url);

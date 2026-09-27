@@ -6,6 +6,7 @@
   --rule: #e2e0da;
   --accent: #2a78d6;
   --accent-soft: #e3edfa;
+  --logo-accent: #E8702A;
   --term-bg: #16181c;
   --term-ink: #e6e4df;
   --term-dim: #8b9099;
@@ -45,15 +46,18 @@ code { font-size: 0.88em; background: color-mix(in srgb, var(--rule) 55%, transp
 
 .site-header { max-width: 72rem; margin: 0 auto; padding: 1.25rem clamp(1rem, 4vw, 2rem); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .brand { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--ink); text-decoration: none; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
-.brand .logo { width: 1.75rem; height: 1.75rem; }
+.brand .mark { width: 2.4rem; height: auto; }
+.wordmark { font-family: "Space Grotesk", var(--sans); font-weight: 400; letter-spacing: -0.03em; }
+.wordmark b { font-weight: 600; }
+.brand .wordmark { font-size: 1.3rem; }
 nav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
 nav a { color: var(--muted); text-decoration: none; font-size: 0.95rem; }
 nav a:hover, nav a[aria-current] { color: var(--ink); }
 nav a[aria-current] { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; }
 
 .hero { max-width: 52rem; margin: 0 auto; padding: clamp(2.5rem, 7vw, 5rem) clamp(1rem, 4vw, 2rem) 2rem; text-align: center; display: grid; gap: 1.25rem; justify-items: center; }
-.hero .logo { width: clamp(4.5rem, 12vw, 6.5rem); height: auto; }
-.hero h1 { font-size: clamp(2.4rem, 7vw, 4.2rem); line-height: 1.05; font-weight: 800; letter-spacing: -0.035em; }
+.hero .logo { width: clamp(9rem, 24vw, 13rem); height: auto; }
+.hero h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 1.05; }
 .hero .tagline { font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.4; color: var(--ink); font-weight: 500; max-width: 38rem; text-wrap: balance; }
 .hero .sub { color: var(--muted); max-width: 36rem; text-wrap: balance; }
 
