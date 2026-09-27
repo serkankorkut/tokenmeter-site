@@ -1,0 +1,129 @@
+<!-- title: Tokenmeter — know what every AI prompt costs -->
+<!-- description: A free local dashboard for Claude Code, Codex and GitHub Copilot CLI. Real cost, tokens by type, cache misses and rate-limit windows for every prompt, read from the logs already on your disk. -->
+<section class="hero">
+  {{logo}}
+  <h1>Tokenmeter</h1>
+  <p class="tagline">Know what every prompt costs you in Claude Code, Codex and Copilot.</p>
+  <p class="sub">A free dashboard on localhost, built from the logs your coding agents already keep. Nothing leaves your machine.</p>
+  <div class="install">
+    <div class="os-tabs" role="tablist" aria-label="Operating system" data-os-tabs>
+      <button role="tab" data-os="macos" aria-selected="true">macOS</button>
+      <button role="tab" data-os="windows" aria-selected="false">Windows</button>
+      <button role="tab" data-os="linux" aria-selected="false">Linux</button>
+    </div>
+    <div data-os-panel="macos">
+      <div class="cmd"><pre id="cmd-macos"><span class="p">$ </span>brew install serkankorkut/tap/tokenmeter && tokenmeter --open</pre><button class="copy" data-copy="cmd-macos-raw" type="button">Copy</button></div>
+      <span id="cmd-macos-raw" hidden>brew install serkankorkut/tap/tokenmeter && tokenmeter --open</span>
+    </div>
+    <div data-os-panel="windows" hidden>
+      <div class="cmd"><pre id="cmd-windows"><span class="p">PS&gt; </span>pipx install tokenmeter-dashboard; tokenmeter --open</pre><button class="copy" data-copy="cmd-windows-raw" type="button">Copy</button></div>
+      <span id="cmd-windows-raw" hidden>pipx install tokenmeter-dashboard; tokenmeter --open</span>
+    </div>
+    <div data-os-panel="linux" hidden>
+      <div class="cmd"><pre id="cmd-linux"><span class="p">$ </span>pipx install tokenmeter-dashboard && tokenmeter --open</pre><button class="copy" data-copy="cmd-linux-raw" type="button">Copy</button></div>
+      <span id="cmd-linux-raw" hidden>pipx install tokenmeter-dashboard && tokenmeter --open</span>
+    </div>
+    <p class="hint">Paste that in a terminal. Your dashboard opens at <code>http://127.0.0.1:7788</code>. <a href="/install/">Other ways to install</a></p>
+  </div>
+</section>
+
+<figure class="shot">
+  <img src="/dashboard.png" alt="The Tokenmeter dashboard: subscription spend, token totals, cache hit rate, and a sortable table of prompts with cached, fresh and output token columns and cost" width="1280" height="860" loading="eager">
+  <figcaption>Updates a few seconds after every prompt finishes.</figcaption>
+</figure>
+
+<section class="what">
+  <h2>What does Tokenmeter do?</h2>
+
+  <div class="feature">
+    <div class="copytext">
+      <h3>It reads the logs your agents already keep.</h3>
+      <p>Claude Code, Codex and Copilot CLI save every reply to disk with its token counts. Tokenmeter indexes them in about a second and follows along live.</p>
+      <p>No hooks, no proxy, no wrapper around your agent. Uninstall it and nothing about your setup changes.</p>
+    </div>
+    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="p">$</span> tokenmeter --open
+indexed <span class="w">6,152</span> turns from <span class="w">132</span> logs in 1.5s
+serving <span class="b">http://127.0.0.1:7788</span>
+
+<span class="g">claude code</span>  <span class="d">~/.claude/projects</span>
+<span class="g">codex</span>        <span class="d">~/.codex/sessions</span>
+<span class="g">copilot cli</span>  <span class="d">~/.copilot/session-store.db</span></pre></div>
+  </div>
+
+  <div class="feature">
+    <div class="copytext">
+      <h3>It prices every prompt, and shows its work.</h3>
+      <p>Tokens are priced up to 200 times apart. A cached read is almost free; re-writing the cache is not. So a plain token count says little about what you paid.</p>
+      <p>Tokenmeter splits every number into cached, fresh and output, and prints the arithmetic under each prompt.</p>
+    </div>
+    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="w">fix the flaky auth test</span>        <span class="d">7 turns · 42s</span>
+
+  cached  <span class="b">3.88M</span> × $0.25 /M  =  $0.97
+  fresh   <span class="a">0.61M</span> × $20   /M  = <span class="a">$12.28</span>
+  output  <span class="g">12.7K</span> × $50   /M  =  $0.63
+  <span class="d">──────────────────────────────────</span>
+  total                   <span class="w">$13.88</span>
+  <span class="d">on claude-fable-5-1</span></pre></div>
+  </div>
+
+  <div class="feature">
+    <div class="copytext">
+      <h3>It finds the cache misses that quietly cost the most.</h3>
+      <p>When a long conversation loses its cache, the whole context is sent again at full price. One miss can cost more than an hour of normal work.</p>
+      <p>Tokenmeter flags every miss, the prompt that was running, and what it cost, so you can see the pattern and avoid it.</p>
+    </div>
+    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="w">Cache misses</span>  <span class="d">last 30 days</span>
+
+<span class="d">Sep 18 16:52</span>  lost <span class="r">3.2M</span>  rewrote <span class="a">614K</span>  <span class="w">$12.28</span>
+<span class="d">Sep 18 11:04</span>  lost <span class="r">2.9M</span>  rewrote <span class="a">587K</span>  <span class="w">$11.73</span>
+<span class="d">Sep 21 16:28</span>  lost <span class="r">3.0M</span>  rewrote <span class="a">600K</span>  <span class="w">$12.00</span>
+
+<span class="d">62 misses ·</span> <span class="a">$329</span> <span class="d">spent re-writing cache</span></pre></div>
+  </div>
+
+  <div class="feature">
+    <div class="copytext">
+      <h3>It watches your limits and your plan.</h3>
+      <p>Codex 5-hour and weekly windows, rolling usage for every tool, and a context gauge for each live session so you see compaction coming.</p>
+      <p>On a subscription you see what you actually pay first, and the API-equivalent value below it. Set a budget and get a desktop alert when you cross it.</p>
+    </div>
+    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="w">Codex 5-hour</span>  <span class="a">█████████████░░░</span>  81%
+             <span class="d">resets in 1.4h</span>
+<span class="w">Codex weekly</span>  <span class="g">████░░░░░░░░░░░░</span>  24%
+<span class="w">Context</span>       <span class="g">██████░░░░░░░░░░</span>  35%
+             <span class="d">351K of 1M tokens</span>
+
+<span class="w">Spend</span>  plan <span class="w">$120</span>  <span class="d">API-equivalent $819</span></pre></div>
+  </div>
+
+  <div class="feature">
+    <div class="copytext">
+      <h3>It never phones home.</h3>
+      <p>The server listens on your machine only. No telemetry, no account, no update check. Your prompts stay where your agents wrote them.</p>
+      <p>Teams can opt in to share totals with one shared dashboard. Prompt text is stripped before anything leaves a laptop.</p>
+    </div>
+    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="p">$</span> lsof -iTCP -sTCP:LISTEN | grep 7788
+Python  76453  you  TCP <span class="g">127.0.0.1:7788</span> (LISTEN)
+
+<span class="p">$</span> tokenmeter --version
+tokenmeter {{version}}</pre></div>
+  </div>
+</section>
+
+<section class="grid3" aria-label="More features">
+  <div class="card"><h3>Every prompt, sortable</h3><p>Text, turns, tokens by type, cost, duration, and a command to resume the session.</p></div>
+  <div class="card"><h3>Cost per commit</h3><p>Turns matched to the next git commit in each repo. What did that change cost to build?</p></div>
+  <div class="card"><h3>By model and project</h3><p>See which model, repo and session your budget goes to.</p></div>
+  <div class="card"><h3>Team mode</h3><p>Aggregates from every laptop in one dashboard, filtered by person.</p></div>
+  <div class="card"><h3>CSV and JSON</h3><p>Export any range, or read the local API from your own scripts.</p></div>
+  <div class="card"><h3>Zero dependencies</h3><p>Python standard library and one HTML file. Light and dark, phone to desktop.</p></div>
+</section>
+
+<section class="platforms">
+  <h2>Works where you work.</h2>
+  <p>macOS with Homebrew, Windows and Linux with pipx or uv. Python 3.9 or newer.</p>
+  <div class="actions">
+    <a class="button primary" href="/install/">Install</a>
+    <a class="button" href="/docs/">Read the docs</a>
+  </div>
+</section>

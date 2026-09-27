@@ -1,0 +1,66 @@
+<!-- title: Docs — Tokenmeter -->
+<!-- description: Tokenmeter configuration, how cost is calculated, usage limits, team mode, the menu bar widget and the local HTTP API. -->
+<div class="doc">
+<section class="section">
+  <h1>Docs</h1>
+  <p class="lede">Everything Tokenmeter does is configured in one JSON file and exposed through a small local API.</p>
+</section>
+<section class="section">
+  <h2>configuration</h2>
+  <p>Create <code>~/.tokenmeter/config.json</code> with only the keys you want to change. It is merged over the bundled price list at startup, so upgrades never touch your settings.</p>
+  <pre><code>{
+  "_plans": {"claude": 100, "codex": 20},
+  "_budget": {"daily": 30, "monthly": 600},
+  "gpt-6-astra": {"input": 10, "cache_read": 1, "cache_write_5m": 0, "cache_write_1h": 0, "output": 50}
+}</code></pre>
+  <div class="table-scroll"><table>
+    <tr><th>Key</th><th>Meaning</th></tr>
+    <tr><td><code>_plans</code></td><td>USD per month per tool. Drives the Subscription spend tile. 0 or missing means API-equivalent cost is shown on top.</td></tr>
+    <tr><td><code>_budget</code></td><td><code>daily</code> and <code>monthly</code> caps in API-equivalent USD. One desktop notification per period when exceeded.</td></tr>
+    <tr><td><code>_context_windows</code></td><td>Context size by model prefix, for the context-fill gauge.</td></tr>
+    <tr><td>model prefixes</td><td>USD per million tokens: <code>input</code>, <code>cache_read</code>, <code>cache_write_5m</code>, <code>cache_write_1h</code>, <code>output</code>. Longest matching prefix wins.</td></tr>
+  </table></div>
+  <div class="table-scroll"><table>
+    <tr><th>Flag or variable</th><th>Default</th><th>Purpose</th></tr>
+    <tr><td><code>--port</code>, <code>TOKENMETER_PORT</code></td><td>7788</td><td>Listen port</td></tr>
+    <tr><td><code>--open</code></td><td></td><td>Open the browser after starting</td></tr>
+    <tr><td><code>--host</code></td><td>127.0.0.1</td><td>Bind address. Only use <code>0.0.0.0</code> for a team server</td></tr>
+    <tr><td><code>--export URL</code></td><td></td><td>Push your last 30 days to a team server every hour</td></tr>
+    <tr><td><code>--user NAME</code></td><td>login name</td><td>Name shown in team mode</td></tr>
+    <tr><td><code>TOKENMETER_TOKEN</code></td><td></td><td>Shared secret for team ingest</td></tr>
+    <tr><td><code>CLAUDE_CONFIG_DIR</code>, <code>CODEX_HOME</code>, <code>COPILOT_DB</code></td><td>the tools' defaults</td><td>Where each agent keeps its logs</td></tr>
+    <tr><td><code>TOKENMETER_DIR</code></td><td>~/.tokenmeter</td><td>Config, log and team data</td></tr>
+  </table></div>
+</section>
+<section class="section">
+  <h2>how cost is calculated</h2>
+  <p>Each model reply reports tokens by type. Tokenmeter multiplies each type by that model's list price and adds them up:</p>
+  <pre><code>cost = cached reads × read price
+     + uncached input × input price
+     + cache writes × write price
+     + output × output price      (all per million tokens)</code></pre>
+  <p>The dashboard splits tokens into three columns so the number is legible. <strong>Cached</strong> is the conversation re-sent from cache each turn, about 2 percent of a fresh token's price on Claude. <strong>Fresh</strong> is uncached input plus cache writes, context sent for the first time or re-written after a cache miss, and it drives most of the cost. <strong>Output</strong> is what the model wrote, including thinking. Claude Code writes its cache at the 1-hour rate; OpenAI does not charge for cache writes. Expand any prompt row to see its arithmetic.</p>
+  <p class="note">These are API list prices. If you are on a subscription you pay the plan price; the dashboard shows that first and this API-equivalent figure below it, so you can see how many times your plan the same usage would have cost.</p>
+</section>
+<section class="section">
+  <h2>usage limits</h2>
+  <p>Codex writes its 5-hour and weekly quota usage into every session log, so Tokenmeter shows the real percentages and reset times as of your last Codex turn. Anthropic does not write Claude plan usage to disk; Tokenmeter shows rolling 5-hour and 7-day totals from the logs, and the real percentage when a Claude Code OAuth token is available in the macOS keychain.</p>
+</section>
+<section class="section">
+  <h2>team mode</h2>
+  <p>On a shared machine run <code>tokenmeter --host 0.0.0.0</code> with <code>TOKENMETER_TOKEN</code> set. On each laptop run <code>tokenmeter --export http://that-host:7788</code> with the same token. The shared dashboard gains a user filter. Only token counts, models, project paths and timestamps travel. Prompt text stays local.</p>
+</section>
+<section class="section">
+  <h2>http api</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Endpoint</th><th>Returns</th></tr>
+    <tr><td><code>GET /api/usage</code></td><td>Every turn and prompt, pricing in use, plans, limits, users</td></tr>
+    <tr><td><code>GET /api/summary</code></td><td>Today, last 5 hours, month, projection, limits. Used by the menu bar</td></tr>
+    <tr><td><code>GET /api/commits</code></td><td>Recent commits per repo, for cost per commit</td></tr>
+    <tr><td><code>GET /api/export.csv?since=ISO</code></td><td>CSV of turns</td></tr>
+    <tr><td><code>GET /api/version</code></td><td>Cheap change token the page polls</td></tr>
+    <tr><td><code>POST /api/ingest</code></td><td>Team mode receiver</td></tr>
+    <tr><td><code>GET /api/health</code></td><td><code>{"ok": true, "app": "tokenmeter"}</code></td></tr>
+  </table></div>
+</section>
+</div>

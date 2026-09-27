@@ -1,0 +1,58 @@
+<!-- title: Install — Tokenmeter -->
+<!-- description: Install Tokenmeter on macOS with Homebrew, or on Windows and Linux with pipx or uv. Python 3.9+, zero dependencies. -->
+<div class="doc">
+<section class="section">
+  <h1>Install</h1>
+  <p class="lede">One command on any machine with Python 3.9 or newer. Pick the one that matches how you already install tools.</p>
+</section>
+<section class="section">
+  <h2>homebrew</h2>
+  <pre><code>brew install serkankorkut/tap/tokenmeter
+tokenmeter --open</code></pre>
+  <p>Keep it running across reboots so the dashboard is always there:</p>
+  <pre><code>brew services start tokenmeter</code></pre>
+</section>
+<section class="section">
+  <h2>windows</h2>
+  <p>Install Python 3.9 or newer from <a href="https://www.python.org/downloads/">python.org</a> or the Microsoft Store, then in PowerShell:</p>
+  <pre><code>py -m pip install --user pipx
+py -m pipx ensurepath
+pipx install tokenmeter-dashboard
+tokenmeter --open</code></pre>
+  <p class="muted">Open a new terminal after <code>ensurepath</code> so <code>tokenmeter</code> is on your PATH. Your settings go in <code>%USERPROFILE%\.tokenmeter\config.json</code>.</p>
+</section>
+<section class="section">
+  <h2>linux, or any machine with python</h2>
+  <pre><code>pipx install tokenmeter-dashboard
+tokenmeter --open</code></pre>
+  <p>Run it without installing, using <a href="https://docs.astral.sh/uv/">uv</a>:</p>
+  <pre><code>uvx --from tokenmeter-dashboard tokenmeter --open</code></pre>
+  <p>Or with plain pip, into any environment:</p>
+  <pre><code>python3 -m pip install tokenmeter-dashboard
+python3 -m tokenmeter --open</code></pre>
+  <p class="muted">Works on macOS, Linux and Windows. The package is <a href="https://pypi.org/project/tokenmeter-dashboard/">tokenmeter-dashboard</a> on PyPI; the command it installs is <code>tokenmeter</code>.</p>
+</section>
+<section class="section">
+  <h2>upgrade and uninstall</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Installed with</th><th>Upgrade</th><th>Uninstall</th></tr>
+    <tr><td>Homebrew</td><td><code>brew update &amp;&amp; brew upgrade tokenmeter</code></td><td><code>brew uninstall tokenmeter</code></td></tr>
+    <tr><td>pipx</td><td><code>pipx upgrade tokenmeter-dashboard</code></td><td><code>pipx uninstall tokenmeter-dashboard</code></td></tr>
+    <tr><td>uvx</td><td>runs the latest each time</td><td>nothing to remove</td></tr>
+    <tr><td>pip</td><td><code>python3 -m pip install -U tokenmeter-dashboard</code></td><td><code>python3 -m pip uninstall tokenmeter-dashboard</code></td></tr>
+  </table></div>
+</section>
+<section class="section">
+  <h2>if the install fails</h2>
+  <p>With Homebrew, run <code>brew update</code> and <code>brew doctor</code> first. If it still fails, upload the build logs and paste the link into an <a href="https://github.com/serkankorkut/homebrew-tap/issues/new?template=install-failure.yml">install issue</a>:</p>
+  <pre><code>brew gist-logs serkankorkut/tap/tokenmeter</code></pre>
+  <p>With pipx, uvx or pip, run it again with <code>--verbose</code> and paste the last lines and your <code>python3 --version</code> into the same form.</p>
+</section>
+<section class="section">
+  <h2>first run</h2>
+  <p>Open <code>http://127.0.0.1:7788</code>. If you pay for a subscription, tell Tokenmeter what you pay so the spend tile is honest:</p>
+  <pre><code>mkdir -p ~/.tokenmeter
+echo '{"_plans": {"claude": 100, "codex": 20}}' &gt; ~/.tokenmeter/config.json</code></pre>
+  <p>Restart once and the tile shows your plan price first, API-equivalent below. Everything else is optional and described in the <a href="/docs/">docs</a>.</p>
+</section>
+</div>

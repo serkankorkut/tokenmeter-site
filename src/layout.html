@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<meta name="author" content="Serkan Korkut">
+<meta name="robots" content="{{robots}}">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15171b" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="{{url}}">
+<meta property="og:url" content="{{url}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tokenmeter">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{site}}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tokenmeter: see what every prompt costs you">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{title}}">
+<meta name="twitter:description" content="{{description}}">
+<meta name="twitter:image" content="{{site}}/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="/style.css">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt">
+<script type="application/ld+json">{{jsonld}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="brand" href="/">{{logo}}<span>tokenmeter</span></a>
+  <nav aria-label="Main">
+    <a href="/install/">Install</a>
+    <a href="/docs/">Docs</a>
+    <a href="/privacy/">Privacy</a>
+    <a href="https://github.com/serkankorkut/homebrew-tap">GitHub</a>
+  </nav>
+</header>
+<main id="main">
+{{content}}
+</main>
+<footer class="site-footer">
+  <div class="feedback">
+    <div>
+      <h2>Stuck, or have an idea?</h2>
+      <p>Install problems, wrong numbers, agents you want supported. Every report gets read.</p>
+    </div>
+    <div class="actions">
+      <a class="button primary" href="https://github.com/serkankorkut/homebrew-tap/issues/new/choose">Report an issue</a>
+      <a class="button" href="mailto:korkutserkan@outlook.com?subject=Tokenmeter">Contact</a>
+    </div>
+  </div>
+  <div class="footer-links">
+    <ul>
+      <li><a href="/install/">Install</a></li>
+      <li><a href="/docs/">Docs</a></li>
+      <li><a href="/privacy/">Privacy</a></li>
+      <li><a href="https://pypi.org/project/tokenmeter-dashboard/">PyPI</a></li>
+      <li><a href="https://github.com/serkankorkut/homebrew-tap">Homebrew tap</a></li>
+    </ul>
+    <span>v{{version}} · MIT · Made by <a href="https://serkan.fyi/">Serkan Korkut</a></span>
+  </div>
+</footer>
+<script src="/site.js" defer></script>
+</body>
+</html>

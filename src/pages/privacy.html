@@ -1,0 +1,25 @@
+<!-- title: Privacy — Tokenmeter -->
+<!-- description: Tokenmeter runs on localhost, reads logs your agents already keep, stores nothing new, and sends nothing anywhere unless you turn on team mode. -->
+<div class="doc">
+<section class="section">
+  <h1>Privacy</h1>
+  <p class="lede">Tokenmeter is a local program that reads files you already have. That is the whole design.</p>
+</section>
+<section class="section">
+  <h2>what it reads</h2>
+  <p>The transcripts Claude Code, Codex and GitHub Copilot CLI write on your own disk, under <code>~/.claude</code>, <code>~/.codex</code> and <code>~/.copilot</code>. Read only. It never modifies them.</p>
+</section>
+<section class="section">
+  <h2>what it stores</h2>
+  <p>Nothing about your usage. The index lives in memory and is rebuilt from the logs each time the server starts. The only files it writes are <code>~/.tokenmeter/config.json</code> if you create it, a server log, and team data if you run a team server.</p>
+</section>
+<section class="section">
+  <h2>what it sends</h2>
+  <p>Nothing, by default. The server binds to <code>127.0.0.1</code> only. There is no telemetry, no update check and no account. The one outbound request it can make is to Anthropic's usage endpoint, and only if a Claude Code login token is already in your keychain, to show your plan's rate-limit percentage.</p>
+  <p>If you turn on <a href="/docs/">team mode</a>, your machine posts aggregates to the server you name: token counts, models, project paths and timestamps. Prompt text is stripped before sending.</p>
+</section>
+<section class="section">
+  <h2>the code</h2>
+  <p>About 500 lines of Python standard library and one HTML file, MIT licensed. The full source ships in the <a href="https://pypi.org/project/tokenmeter-dashboard/#files">package on PyPI</a>; download it and read it in ten minutes.</p>
+</section>
+</div>

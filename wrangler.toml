@@ -1,0 +1,12 @@
+name = "tokenmeter-site"
+compatibility_date = "2026-09-01"
+workers_dev = false
+routes = [
+  { pattern = "tokenmeter.fyi", custom_domain = true },
+  { pattern = "www.tokenmeter.fyi", custom_domain = true }
+]
+
+[assets]
+directory = "./public"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"

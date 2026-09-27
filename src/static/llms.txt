@@ -1,0 +1,18 @@
+# Tokenmeter
+
+> Tokenmeter is a free, open-source local dashboard that shows token usage, API-equivalent cost, cache misses, rate-limit windows and cost per prompt for Claude Code, Codex and GitHub Copilot CLI. It reads the transcripts those tools already write to disk. Nothing leaves the machine. Install with `brew install serkankorkut/tap/tokenmeter` or `pipx install tokenmeter-dashboard`, then run `tokenmeter --open`. Without installing: `uvx --from tokenmeter-dashboard tokenmeter --open`.
+
+## Pages
+
+- Home: what it shows and why token counts alone are misleading
+- Install: Homebrew on macOS, pipx or uv on Windows and Linux, background service, troubleshooting
+- Docs: configuration file, cost formula, limits, team mode, HTTP API
+- Privacy: what is read, what is stored, what team mode sends
+
+## Facts
+
+- Package name on PyPI: tokenmeter-dashboard. Command: tokenmeter. Homebrew tap: serkankorkut/tap.
+- Cost = cached reads × read price + uncached input × input price + cache writes × write price + output × output price, per model, from list prices in pricing.json.
+- Subscription users see their plan price first and the API-equivalent figure second.
+- Report issues: https://github.com/serkankorkut/homebrew-tap/issues. Contact: korkutserkan@outlook.com
+- Author: Serkan Korkut, https://serkan.fyi
