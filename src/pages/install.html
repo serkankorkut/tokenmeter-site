@@ -8,9 +8,8 @@
 <section class="section">
   <h2>homebrew</h2>
   <pre><code>brew install serkankorkut/tap/tokenmeter
-tokenmeter --open</code></pre>
-  <p>Keep it running across reboots so the dashboard is always there:</p>
-  <pre><code>brew services start tokenmeter</code></pre>
+tokenmeter start</code></pre>
+  <p><code>tokenmeter start</code> runs the dashboard in the background, starts it again at login, and opens it in your browser. Stop it with <code>tokenmeter stop</code>.</p>
 </section>
 <section class="section">
   <h2>windows</h2>
@@ -18,13 +17,13 @@ tokenmeter --open</code></pre>
   <pre><code>py -m pip install --user pipx
 py -m pipx ensurepath
 pipx install tokenmeter-dashboard
-tokenmeter --open</code></pre>
+tokenmeter start</code></pre>
   <p class="muted">Open a new terminal after <code>ensurepath</code> so <code>tokenmeter</code> is on your PATH. Your settings go in <code>%USERPROFILE%\.tokenmeter\config.json</code>.</p>
 </section>
 <section class="section">
   <h2>linux, or any machine with python</h2>
   <pre><code>pipx install tokenmeter-dashboard
-tokenmeter --open</code></pre>
+tokenmeter start</code></pre>
   <p>Run it without installing, using <a href="https://docs.astral.sh/uv/">uv</a>:</p>
   <pre><code>uvx --from tokenmeter-dashboard tokenmeter --open</code></pre>
   <p>Or with plain pip, into any environment:</p>
@@ -44,6 +43,7 @@ python3 -m tokenmeter --open</code></pre>
 </section>
 <section class="section">
   <h2>if the install fails</h2>
+  <p>If another app already uses port 7788, Tokenmeter moves to the next free port up to 7798 and prints the address. To choose your own, run <code>tokenmeter start --port 8765</code>; it is remembered from then on.</p>
   <p>With Homebrew, run <code>brew update</code> and <code>brew doctor</code> first. If it still fails, upload the build logs and paste the link into an <a href="https://github.com/serkankorkut/homebrew-tap/issues/new?template=install-failure.yml">install issue</a>:</p>
   <pre><code>brew gist-logs serkankorkut/tap/tokenmeter</code></pre>
   <p>With pipx, uvx or pip, run it again with <code>--verbose</code> and paste the last lines and your <code>python3 --version</code> into the same form.</p>

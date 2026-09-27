@@ -12,18 +12,18 @@
       <button role="tab" data-os="linux" aria-selected="false">Linux</button>
     </div>
     <div data-os-panel="macos">
-      <div class="cmd"><pre id="cmd-macos"><span class="p">$ </span>brew install serkankorkut/tap/tokenmeter && tokenmeter --open</pre><button class="copy" data-copy="cmd-macos-raw" type="button">Copy</button></div>
-      <span id="cmd-macos-raw" hidden>brew install serkankorkut/tap/tokenmeter && tokenmeter --open</span>
+      <div class="cmd"><pre id="cmd-macos"><span class="p">$ </span>brew install serkankorkut/tap/tokenmeter && tokenmeter start</pre><button class="copy" data-copy="cmd-macos-raw" type="button">Copy</button></div>
+      <span id="cmd-macos-raw" hidden>brew install serkankorkut/tap/tokenmeter && tokenmeter start</span>
     </div>
     <div data-os-panel="windows" hidden>
-      <div class="cmd"><pre id="cmd-windows"><span class="p">PS&gt; </span>pipx install tokenmeter-dashboard; tokenmeter --open</pre><button class="copy" data-copy="cmd-windows-raw" type="button">Copy</button></div>
-      <span id="cmd-windows-raw" hidden>pipx install tokenmeter-dashboard; tokenmeter --open</span>
+      <div class="cmd"><pre id="cmd-windows"><span class="p">PS&gt; </span>pipx install tokenmeter-dashboard; tokenmeter start</pre><button class="copy" data-copy="cmd-windows-raw" type="button">Copy</button></div>
+      <span id="cmd-windows-raw" hidden>pipx install tokenmeter-dashboard; tokenmeter start</span>
     </div>
     <div data-os-panel="linux" hidden>
-      <div class="cmd"><pre id="cmd-linux"><span class="p">$ </span>pipx install tokenmeter-dashboard && tokenmeter --open</pre><button class="copy" data-copy="cmd-linux-raw" type="button">Copy</button></div>
-      <span id="cmd-linux-raw" hidden>pipx install tokenmeter-dashboard && tokenmeter --open</span>
+      <div class="cmd"><pre id="cmd-linux"><span class="p">$ </span>pipx install tokenmeter-dashboard && tokenmeter start</pre><button class="copy" data-copy="cmd-linux-raw" type="button">Copy</button></div>
+      <span id="cmd-linux-raw" hidden>pipx install tokenmeter-dashboard && tokenmeter start</span>
     </div>
-    <p class="hint">Paste that in a terminal. Your dashboard opens at <code>http://127.0.0.1:7788</code>. <a href="/install/">Other ways to install</a></p>
+    <p class="hint">Paste that in a terminal. Your dashboard opens at <code>http://127.0.0.1:7788</code> and keeps running in the background. <a href="/install/">Other ways to install</a></p>
   </div>
 </section>
 
@@ -41,7 +41,7 @@
       <p>Claude Code, Codex and Copilot CLI save every reply to disk with its token counts. Tokenmeter indexes them in about a second and follows along live.</p>
       <p>No hooks, no proxy, no wrapper around your agent. Uninstall it and nothing about your setup changes.</p>
     </div>
-    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="p">$</span> tokenmeter --open
+    <div class="term"><div class="bar"><i></i><i></i><i></i></div><pre><span class="p">$</span> tokenmeter start
 indexed <span class="w">6,152</span> turns from <span class="w">132</span> logs in 1.5s
 serving <span class="b">http://127.0.0.1:7788</span>
 

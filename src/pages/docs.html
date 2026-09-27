@@ -22,8 +22,10 @@
   </table></div>
   <div class="table-scroll"><table>
     <tr><th>Flag or variable</th><th>Default</th><th>Purpose</th></tr>
-    <tr><td><code>--port</code>, <code>TOKENMETER_PORT</code></td><td>7788</td><td>Listen port</td></tr>
-    <tr><td><code>--open</code></td><td></td><td>Open the browser after starting</td></tr>
+    <tr><td><code>--port N</code></td><td>7788</td><td>Listen port. With <code>start</code> it is saved, so later runs and the background service use it. Without a saved port, Tokenmeter tries 7788 and, if another app holds it, the next 10 ports</td></tr>
+    <tr><td><code>TOKENMETER_PORT</code></td><td></td><td>Port for this run only</td></tr>
+    <tr><td><code>start</code>, <code>stop</code></td><td></td><td>Run in the background and open the browser; stop it again</td></tr>
+    <tr><td><code>--open</code></td><td></td><td>Open the browser when running in the terminal</td></tr>
     <tr><td><code>--host</code></td><td>127.0.0.1</td><td>Bind address. Only use <code>0.0.0.0</code> for a team server</td></tr>
     <tr><td><code>--export URL</code></td><td></td><td>Push your last 30 days to a team server every hour</td></tr>
     <tr><td><code>--user NAME</code></td><td>login name</td><td>Name shown in team mode</td></tr>
