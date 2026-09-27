@@ -35,10 +35,10 @@ python3 -m tokenmeter --open</code></pre>
   <h2>upgrade and uninstall</h2>
   <div class="table-scroll"><table>
     <tr><th>Installed with</th><th>Upgrade</th><th>Uninstall</th></tr>
-    <tr><td>Homebrew</td><td><code>brew update &amp;&amp; brew upgrade tokenmeter</code></td><td><code>brew uninstall tokenmeter</code></td></tr>
-    <tr><td>pipx</td><td><code>pipx upgrade tokenmeter-dashboard</code></td><td><code>pipx uninstall tokenmeter-dashboard</code></td></tr>
+    <tr><td>Homebrew</td><td><code>brew update &amp;&amp; brew upgrade tokenmeter &amp;&amp; tokenmeter start</code></td><td><code>tokenmeter stop &amp;&amp; brew uninstall tokenmeter</code></td></tr>
+    <tr><td>pipx</td><td><code>pipx upgrade tokenmeter-dashboard &amp;&amp; tokenmeter start</code></td><td><code>tokenmeter stop &amp;&amp; pipx uninstall tokenmeter-dashboard</code></td></tr>
     <tr><td>uvx</td><td>runs the latest each time</td><td>nothing to remove</td></tr>
-    <tr><td>pip</td><td><code>python3 -m pip install -U tokenmeter-dashboard</code></td><td><code>python3 -m pip uninstall tokenmeter-dashboard</code></td></tr>
+    <tr><td>pip</td><td><code>python3 -m pip install -U tokenmeter-dashboard &amp;&amp; tokenmeter start</code></td><td><code>tokenmeter stop &amp;&amp; python3 -m pip uninstall tokenmeter-dashboard</code></td></tr>
   </table></div>
 </section>
 <section class="section">
