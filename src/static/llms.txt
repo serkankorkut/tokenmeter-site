@@ -14,5 +14,5 @@
 - Package name on PyPI: tokenmeter-dashboard. Command: tokenmeter. Homebrew tap: serkankorkut/tap.
 - Cost = cached reads × read price + uncached input × input price + cache writes × write price + output × output price, per model, from list prices in pricing.json.
 - Subscription users see their plan price first and the API-equivalent figure second.
-- Report issues: https://github.com/serkankorkut/homebrew-tap/issues. Contact: korkutserkan@outlook.com
+- Source code: https://github.com/serkankorkut/tokenmeter. Report issues: https://github.com/serkankorkut/homebrew-tap/issues. Contact: korkutserkan@outlook.com
 - Author: Serkan Korkut, https://serkan.fyi

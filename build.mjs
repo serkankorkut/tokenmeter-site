@@ -16,7 +16,7 @@ const app = {
   description: "A local dashboard that shows token usage, cost, cache misses and rate-limit windows for every prompt in Claude Code, Codex and GitHub Copilot CLI. Nothing leaves your machine.",
   author: { "@type": "Person", name: "Serkan Korkut", url: "https://serkan.fyi/" },
   downloadUrl: "https://pypi.org/project/tokenmeter-dashboard/",
-  codeRepository: "https://github.com/serkankorkut/homebrew-tap"
+  codeRepository: "https://github.com/serkankorkut/tokenmeter"
 };
 const website = { "@type": "WebSite", "@id": `${site}/#website`, name: "Tokenmeter", url: `${site}/`, inLanguage: "en" };
 const layout = readFileSync("src/layout.html", "utf8");
