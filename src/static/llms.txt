@@ -10,6 +10,7 @@
 - Privacy: what is read, what is stored, what team mode sends
 
 - Guide, Claude Code cost: https://tokenmeter.fyi/claude-code-cost/ (token prices, per-prompt example, cache lifetime, how to spend less)
+- Guide, Codex usage limits: https://tokenmeter.fyi/codex-usage-limits/ (5-hour and weekly windows, messages per plan, /status, the rate_limits fields in the logs)
 - Guide, Claude Code token usage: https://tokenmeter.fyi/claude-code-token-usage/ (/usage, log locations and fields for Claude Code, Codex and Copilot CLI, a jq one-liner)
 
 ## Facts

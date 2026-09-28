@@ -1,0 +1,77 @@
+<!-- title: Codex usage limits: the 5-hour and weekly windows, and how to check them -->
+<!-- crumb: Codex usage limits -->
+<!-- type: TechArticle -->
+<!-- date: 2026-09-28 -->
+<!-- description: How Codex usage limits work on ChatGPT plans: the 5-hour and weekly windows, how many messages each plan gets, how to check what is left with /status, the usage page or your local logs, and what to do when you hit the limit. -->
+<div class="doc">
+<section class="section">
+  <h1>Codex usage limits</h1>
+  <p class="lede">Codex on a ChatGPT plan runs inside two windows: a rolling 5-hour limit and a weekly one. How far a window goes depends on the model and the size of your tasks. Here is how the limits work, how to check what is left, and what to do when you run out.</p>
+  <p class="muted">Updated 28 September 2026 · Serkan Korkut</p>
+</section>
+<section class="section">
+  <h2>How the limits work</h2>
+  <p>Codex is included in the ChatGPT Free, Go, Plus, Pro, Business, Edu and Enterprise plans. Your usage counts against a rolling 5-hour window, with a weekly limit on top. The number of messages you get depends on the model, and on the size and complexity of each task.</p>
+  <p>OpenAI's own estimates of messages per 5 hours:</p>
+  <div class="table-scroll"><table>
+    <tr><th>Plan</th><th>GPT-6 Astra</th><th>GPT-6 Luna</th></tr>
+    <tr><td>Plus, Business Standard</td><td>5 to 45</td><td>350 to 3,000</td></tr>
+    <tr><td>Pro 5x</td><td>25 to 225</td><td>1,750 to 14,000</td></tr>
+    <tr><td>Pro 20x</td><td>100 to 900</td><td>7,000 to 56,000</td></tr>
+  </table></div>
+  <p class="muted">From <a href="https://learn.chatgpt.com/docs/pricing">OpenAI's Codex pricing page</a>. The ranges are wide because one large task can use as much as dozens of small ones, and they change with the model lineup.</p>
+</section>
+<section class="section">
+  <h2>How to check what is left</h2>
+  <ul>
+    <li><strong>In Codex</strong>, run <code>/status</code> in an active session.</li>
+    <li><strong>On the web</strong>, open the usage page at <a href="https://chatgpt.com/codex/settings/usage">chatgpt.com/codex/settings/usage</a>.</li>
+    <li><strong>On your disk</strong>, every Codex session log records both windows after each turn.</li>
+  </ul>
+  <p>The logs are in <code>~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl</code>. Each <code>token_count</code> event carries a <code>rate_limits</code> object like this one:</p>
+  <pre><code>"rate_limits": {
+  "plan_type": "plus",
+  "primary":   { "used_percent": 81.0, "window_minutes": 300,   "resets_at": 1790640000 },
+  "secondary": { "used_percent": 24.0, "window_minutes": 10080, "resets_at": 1791072000 }
+}</code></pre>
+  <p><code>primary</code> is the 5-hour window, 300 minutes. <code>secondary</code> is the weekly one, 10,080 minutes. <code>resets_at</code> is a Unix timestamp. This prints the latest reading across all your sessions:</p>
+  <pre><code>cat $(ls -tr ~/.codex/sessions/*/*/*/*.jsonl) \
+  | jq -c 'select(.payload.rate_limits.primary) | .payload.rate_limits | {
+      plan: .plan_type,
+      five_hour_used: .primary.used_percent,
+      five_hour_resets: (.primary.resets_at | todate),
+      weekly_used: .secondary.used_percent,
+      weekly_resets: (.secondary.resets_at | todate)}' \
+  | tail -1</code></pre>
+  <p>The numbers are as of your last Codex turn. Usage on another machine or in the ChatGPT app shows up after your next turn here.</p>
+</section>
+<section class="section">
+  <h2>When you hit the limit</h2>
+  <ul>
+    <li>A turn that is already running can finish, subject to fair use.</li>
+    <li>You can buy additional credits and keep working without changing plan.</li>
+    <li>You can run Codex with an API key instead, billed per token at standard API rates.</li>
+    <li>Or wait for the window to reset. The 5-hour window rolls, so capacity comes back gradually.</li>
+  </ul>
+</section>
+<section class="section">
+  <h2>Both windows, always in view</h2>
+  <p>Tokenmeter reads the same logs and shows both Codex windows as bars with a reset countdown, next to what each prompt used and its API-equivalent cost. Claude Code and GitHub Copilot CLI appear in the same dashboard.</p>
+  <pre><code>Codex 5-hour  █████████████░░░  81%   resets in 1.4h
+Codex weekly  ████░░░░░░░░░░░░  24%</code></pre>
+  <pre><code>brew install serkankorkut/tap/tokenmeter
+tokenmeter start</code></pre>
+  <p>On Windows and Linux, <code>pipx install tokenmeter-dashboard</code>. <a href="/install/">All install options</a>.</p>
+</section>
+<section class="section faq">
+  <h2>Questions</h2>
+  <h3>How long is the Codex usage limit window?</h3>
+  <p>Five hours, rolling, with a weekly limit on top. In the logs they appear as windows of 300 and 10,080 minutes.</p>
+  <h3>When does the Codex limit reset?</h3>
+  <p>The 5-hour window rolls, so usage from more than five hours ago stops counting. The exact reset times for both windows are in <code>/status</code>, on the usage page, and in the <code>resets_at</code> field of your session logs.</p>
+  <h3>How many Codex messages do I get on ChatGPT Plus?</h3>
+  <p>OpenAI estimates 5 to 45 messages per 5 hours with GPT-6 Astra and 350 to 3,000 with GPT-6 Luna. Large tasks use more of the window than small ones.</p>
+  <h3>Can I keep using Codex after hitting the limit?</h3>
+  <p>Yes, by buying additional credits or by switching to an API key billed at standard rates. Otherwise wait for the window to reset.</p>
+</section>
+</div>
