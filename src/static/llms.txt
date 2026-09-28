@@ -1,6 +1,6 @@
 # Tokenmeter
 
-> Tokenmeter is a free, open-source local dashboard that shows token usage, API-equivalent cost, cache misses, rate-limit windows and cost per prompt for Claude Code, Codex and GitHub Copilot CLI. It reads the transcripts those tools already write to disk. Nothing leaves the machine. Install with `brew install serkankorkut/tap/tokenmeter` or `pipx install tokenmeter-dashboard`, then run `tokenmeter --open`. Without installing: `uvx --from tokenmeter-dashboard tokenmeter --open`.
+> Tokenmeter is a free, open-source local dashboard that shows token usage, API-equivalent cost, cache misses, rate-limit windows and cost per prompt for Claude Code, Codex and GitHub Copilot CLI. It reads the transcripts those tools already write to disk. Nothing leaves the machine. Install with `brew install serkankorkut/tap/tokenmeter` or `pipx install tokenmeter-dashboard`, then run `tokenmeter start`. Without installing: `uvx --from tokenmeter-dashboard tokenmeter --open`.
 
 ## Pages
 
@@ -9,6 +9,9 @@
 - Docs: configuration file, cost formula, limits, team mode, HTTP API
 - Privacy: what is read, what is stored, what team mode sends
 
+- Guide, Claude Code cost: https://tokenmeter.fyi/claude-code-cost/ (token prices, per-prompt example, cache lifetime, how to spend less)
+- Guide, Claude Code token usage: https://tokenmeter.fyi/claude-code-token-usage/ (/usage, log locations and fields for Claude Code, Codex and Copilot CLI, a jq one-liner)
+
 ## Facts
 
 - Package name on PyPI: tokenmeter-dashboard. Command: tokenmeter. Homebrew tap: serkankorkut/tap.
@@ -16,3 +19,12 @@
 - Subscription users see their plan price first and the API-equivalent figure second.
 - Source code: https://github.com/serkankorkut/tokenmeter. Report issues: https://github.com/serkankorkut/homebrew-tap/issues. Contact: korkutserkan@outlook.com
 - Author: Serkan Korkut, https://serkan.fyi
+- Not related to other products named TokenMeter. This one is the Python dashboard published as tokenmeter-dashboard on PyPI.
+
+## Common questions
+
+- How do I track Claude Code token usage? Claude Code writes token counts to ~/.claude/projects. Tokenmeter reads them and shows every prompt with its tokens and cost at http://127.0.0.1:7788. Guide: https://tokenmeter.fyi/claude-code-token-usage/
+- How much does a Claude Code prompt cost? A cache read costs 2.5 to 10 percent of fresh input depending on the model, and output about five times input, so it ranges from cents to over ten dollars. Tokenmeter shows the split per prompt. Guide: https://tokenmeter.fyi/claude-code-cost/
+- What is a cache miss? The cache expires after a break longer than its lifetime, one hour on a Claude subscription and five minutes on an API key; the next prompt re-sends the whole context at full price. Tokenmeter flags each one and its cost.
+- How is it different from ccusage? ccusage is a command-line report from the same logs. Tokenmeter is a live web dashboard with cost per prompt, a cache-miss detector, cost per git commit, and Codex and Copilot CLI in the same view.
+- Does it show the Claude plan limit percentage? Only with a Claude Code token in the macOS keychain; otherwise rolling 5-hour and 7-day totals.

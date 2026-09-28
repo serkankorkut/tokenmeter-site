@@ -1,0 +1,84 @@
+<!-- title: How much does Claude Code cost? Per prompt, per day and per month -->
+<!-- crumb: Claude Code cost -->
+<!-- type: TechArticle -->
+<!-- date: 2026-09-28 -->
+<!-- description: What Claude Code costs per prompt, per day and per month, how the four token prices work, why long sessions and cache misses cost more, and how to see your own numbers. -->
+<div class="doc">
+<section class="section">
+  <h1>How much does Claude Code cost?</h1>
+  <p class="lede">Anthropic's own figure is about $13 per developer per active day, and $150 to $250 per developer per month. Your number depends on the model you use, how long your sessions run, and how often the cache is lost. Here is how the price is built, and how to see your own.</p>
+  <p class="muted">Updated 28 September 2026 · Serkan Korkut</p>
+</section>
+<section class="section">
+  <h2>The short answer</h2>
+  <ul>
+    <li><strong>On a subscription</strong>, Claude Code is included in Pro at $20 a month and Max from $100 a month. You pay the plan price and work inside its 5-hour and weekly usage windows. Current plans are on <a href="https://claude.com/pricing">claude.com/pricing</a>.</li>
+    <li><strong>On an API key</strong>, you pay per token. Across enterprise deployments Anthropic reports an average of about $13 per developer per active day and $150 to $250 per month, with 90 percent of users below $30 per active day, in the <a href="https://code.claude.com/docs/en/costs">Claude Code cost docs</a>.</li>
+    <li><strong>Per prompt</strong>, the range is wide: a few cents in a short session, over ten dollars for a prompt that re-sends a long conversation.</li>
+  </ul>
+</section>
+<section class="section">
+  <h2>What you pay for</h2>
+  <p>Every request carries four kinds of tokens, each with its own price. Claude Code sends the whole conversation with every request, so most tokens are context, not your prompt.</p>
+  <div class="table-scroll"><table>
+    <tr><th>Token kind</th><th>What it is</th><th>Price against fresh input</th></tr>
+    <tr><td>Cache read</td><td>Context the server already has cached</td><td>2.5 to 10 percent, by model</td></tr>
+    <tr><td>Input</td><td>Context sent fresh</td><td>1x</td></tr>
+    <tr><td>Cache write</td><td>Fresh context that is also stored for reuse</td><td>1.25x for 5 minutes, 2x for 1 hour</td></tr>
+    <tr><td>Output</td><td>What the model writes, thinking included</td><td>5x on current models</td></tr>
+  </table></div>
+  <p>List prices in US dollars per million tokens, from the price list bundled with Tokenmeter:</p>
+  <div class="table-scroll"><table>
+    <tr><th>Model</th><th>Input</th><th>Cache read</th><th>Cache write, 1 hour</th><th>Output</th></tr>
+    <tr><td>claude-fable-5-1</td><td>$10</td><td>$0.25</td><td>$20</td><td>$50</td></tr>
+    <tr><td>claude-opus-5-5</td><td>$4</td><td>$0.20</td><td>$8</td><td>$20</td></tr>
+    <tr><td>claude-sonnet-5</td><td>$2</td><td>$0.20</td><td>$4</td><td>$10</td></tr>
+    <tr><td>claude-haiku-4</td><td>$1</td><td>$0.10</td><td>$2</td><td>$5</td></tr>
+  </table></div>
+  <p class="muted">The official list is on <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic's pricing page</a>. Claude Code writes its cache at the 1-hour rate on a subscription.</p>
+</section>
+<section class="section">
+  <h2>One prompt, priced</h2>
+  <p>This example from Tokenmeter's demo data is a one-line prompt, "fix the failing test", late in a long session on claude-fable-5-1:</p>
+  <pre><code>cached  3.88M × $0.25 /M  =  $0.97
+fresh   0.61M × $20   /M  =  $12.28
+output  12.7K × $50   /M  =  $0.63
+                          =  $13.88</code></pre>
+  <p>The prompt was one line. Almost all of the cost was 614 thousand tokens of context written to the cache again, which is what happens after a cache miss.</p>
+</section>
+<section class="section">
+  <h2>Why long sessions and breaks cost more</h2>
+  <p><strong>Long context.</strong> Every request re-reads the conversation. At the cached rate that is cheap per token, but a session that has been open all day carries millions of tokens on every turn.</p>
+  <p><strong>Cache misses.</strong> The cache expires after a break longer than its lifetime: one hour on a Claude subscription, five minutes on an API key or once you draw on usage credits. The next prompt, however short, sends the full context again at the fresh price.</p>
+  <p><strong>Compaction.</strong> Summarising a large conversation reads all of it, so it costs about as much as a cache miss. <code>/clear</code> costs nothing.</p>
+</section>
+<section class="section">
+  <h2>How to see your own cost</h2>
+  <p><strong>Inside Claude Code</strong>, run <code>/usage</code>. The Session block shows tokens and an estimated cost for the current session, and recent versions add a prompt cache line with the number of misses. Subscribers also see plan usage bars. It covers the current session and resets on <code>/clear</code>.</p>
+  <p><strong>Across every session</strong>, Tokenmeter reads the logs Claude Code keeps in <code>~/.claude/projects</code> and shows every prompt with its tokens and cost, the cache misses, cost per git commit and daily totals. Codex and GitHub Copilot CLI appear in the same view.</p>
+  <pre><code>brew install serkankorkut/tap/tokenmeter
+tokenmeter start</code></pre>
+  <p>On Windows and Linux, <code>pipx install tokenmeter-dashboard</code>. <a href="/install/">All install options</a>.</p>
+</section>
+<section class="section">
+  <h2>How to spend less</h2>
+  <ul>
+    <li>Run <code>/clear</code> between unrelated tasks, so each request carries less history.</li>
+    <li>Do not revive a session that has gone cold. Start a new one with a short summary.</li>
+    <li>Match the model to the job. Sonnet costs a fraction of Fable or Opus for routine work.</li>
+    <li>Send test runs and log reading to a subagent, so the long output stays out of the main conversation.</li>
+    <li>Write specific prompts. "Fix the date parsing in invoice.ts" reads fewer files than "fix the bugs".</li>
+  </ul>
+</section>
+<section class="section faq">
+  <h2>Questions</h2>
+  <h3>How much does Claude Code cost per month?</h3>
+  <p>On a subscription, the plan price: $20 for Pro, from $100 for Max. On an API key, Anthropic reports $150 to $250 per developer per month on average across enterprise deployments. Heavy individual use can go well above that.</p>
+  <h3>How much does Claude Code cost per token?</h3>
+  <p>It depends on the model and the kind of token. On claude-sonnet-5, fresh input is $2 per million tokens, a cache read $0.20 and output $10. On claude-fable-5-1, fresh input is $10, a cache read $0.25 and output $50.</p>
+  <h3>Is a Claude subscription cheaper than paying for the API?</h3>
+  <p>For daily use, usually yes. Tokenmeter shows your plan price next to the API-equivalent value of what you used, so you can check with your own numbers.</p>
+  <h3>Why did one short prompt cost so much?</h3>
+  <p>Almost always a cache miss or a compaction. The prompt was short, but the whole conversation was sent again at the full price.</p>
+</section>
+</div>

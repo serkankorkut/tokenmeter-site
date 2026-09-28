@@ -1,10 +1,10 @@
-<!-- title: Tokenmeter — know what every AI prompt costs -->
-<!-- description: A free local dashboard for Claude Code, Codex and GitHub Copilot CLI. Real cost, tokens by type, cache misses and rate-limit windows for every prompt, read from the logs already on your disk. -->
+<!-- title: Tokenmeter — Claude Code token usage and cost dashboard -->
+<!-- description: Track Claude Code token usage and cost per prompt, plus Codex and GitHub Copilot CLI. A free local usage dashboard with cache misses, usage limits and cost per commit. Nothing leaves your machine. -->
 <section class="hero">
   {{logo}}
-  <h1 class="wordmark"><b>token</b>meter</h1>
-  <p class="tagline">Know what every prompt costs you in Claude Code, Codex and Copilot.</p>
-  <p class="sub">A free dashboard on localhost, built from the logs your coding agents already keep. Nothing leaves your machine.</p>
+  <p class="wordmark"><b>token</b>meter</p>
+  <h1 class="tagline">Know what every prompt costs you in Claude Code, Codex and Copilot.</h1>
+  <p class="sub">A free Claude Code token usage and cost dashboard on localhost, built from the logs your coding agents already keep. Nothing leaves your machine.</p>
   <div class="install">
     <div class="os-tabs" role="tablist" aria-label="Operating system" data-os-tabs>
       <button role="tab" data-os="macos" aria-selected="true">macOS</button>
@@ -117,6 +117,26 @@ tokenmeter {{version}}</pre></div>
   <div class="card"><h3>Team mode</h3><p>Aggregates from every laptop in one dashboard, filtered by person.</p></div>
   <div class="card"><h3>CSV and JSON</h3><p>Export any range, or read the local API from your own scripts.</p></div>
   <div class="card"><h3>Zero dependencies</h3><p>Python standard library and one HTML file. Light and dark, phone to desktop.</p></div>
+</section>
+
+<section class="faq">
+  <h2>Questions</h2>
+  <h3>How do I track Claude Code token usage?</h3>
+  <p>Claude Code already writes every reply with its token counts to <code>~/.claude/projects</code>. Install Tokenmeter with <code>brew install serkankorkut/tap/tokenmeter</code> or <code>pipx install tokenmeter-dashboard</code>, run <code>tokenmeter start</code>, and open <code>http://127.0.0.1:7788</code>. Every prompt shows up with its tokens and cost a few seconds after it finishes. <a href="/claude-code-token-usage/">Where the logs are and what they contain</a>.</p>
+  <h3>How much does a Claude Code prompt cost?</h3>
+  <p>It depends on how much of the context was cached. A cache read costs 2.5 to 10 percent of fresh input, depending on the model, and output costs about five times input. A short prompt in a long session can cost a few cents or more than ten dollars. Tokenmeter shows the split and the arithmetic for every prompt, using list prices you can override. <a href="/claude-code-cost/">How Claude Code pricing works</a>.</p>
+  <h3>What is a cache miss in Claude Code?</h3>
+  <p>The cached conversation expires after a break longer than its lifetime: one hour on a Claude subscription, five minutes on an API key. The next prompt then sends the whole context again at full price. Tokenmeter flags each cache miss with the prompt that caused it and what the re-write cost.</p>
+  <h3>Does it work with Codex and GitHub Copilot CLI?</h3>
+  <p>Yes. It reads Codex sessions in <code>~/.codex/sessions</code>, including the 5-hour and weekly limit windows Codex records, and the Copilot CLI database in <code>~/.copilot/session-store.db</code>. All three tools show up in one dashboard.</p>
+  <h3>Does Tokenmeter show my Claude plan usage limit?</h3>
+  <p>Only if a Claude Code login token is in your macOS keychain, because Anthropic does not write plan usage to disk. Otherwise Tokenmeter shows rolling 5-hour and 7-day totals from the logs.</p>
+  <h3>How is Tokenmeter different from ccusage?</h3>
+  <p>ccusage is a command-line report built from the same Claude Code logs, and Claude Code's own <code>/usage</code> covers the current session. Tokenmeter is a live web dashboard: cost per prompt split into cached, fresh and output tokens, a cache-miss detector, cost per git commit, and Claude Code, Codex and Copilot CLI in one view.</p>
+  <h3>Is my data sent anywhere?</h3>
+  <p>No. The server listens on 127.0.0.1 only, with no telemetry, no account and no update check. The one outbound request is Anthropic's usage endpoint, and only if a Claude Code token is already in your keychain. Team mode sends totals without prompt text, and only if you turn it on.</p>
+  <h3>Is this the same as other tools called TokenMeter?</h3>
+  <p>No. This Tokenmeter is the open source Python dashboard by Serkan Korkut, published as <code>tokenmeter-dashboard</code> on PyPI and <code>serkankorkut/tap/tokenmeter</code> on Homebrew, with source at github.com/serkankorkut/tokenmeter. It is not related to other products that use the name.</p>
 </section>
 
 <section class="platforms">

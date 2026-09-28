@@ -1,0 +1,81 @@
+<!-- title: How to check Claude Code token usage, and Codex and Copilot CLI too -->
+<!-- crumb: Claude Code token usage -->
+<!-- type: TechArticle -->
+<!-- date: 2026-09-28 -->
+<!-- description: How to check Claude Code token usage with /usage, where Claude Code, Codex and Copilot CLI keep their token logs, what each field means, a jq one-liner to add them up, and a dashboard for all of it. -->
+<div class="doc">
+<section class="section">
+  <h1>How to check Claude Code token usage</h1>
+  <p class="lede">Claude Code shows the current session with <code>/usage</code>. Everything else is already on your disk: every reply is logged with its token counts. Here is where to look, what the numbers mean, and how to see all of it at once.</p>
+  <p class="muted">Updated 28 September 2026 · Serkan Korkut</p>
+</section>
+<section class="section">
+  <h2>Inside Claude Code</h2>
+  <p>Run <code>/usage</code>. The Session block lists input, output, cache read and cache write tokens per model, with an estimated cost at list price. Recent versions add a prompt cache line with the share of input served from cache and the number of misses. On a Pro or Max plan, the same screen shows your plan usage bars and a breakdown of the last 24 hours or 7 days on this machine.</p>
+  <p>The Session block covers the current session only and resets on <code>/clear</code>. For history across weeks and projects, read the logs.</p>
+</section>
+<section class="section">
+  <h2>Where the logs are</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Tool</th><th>Location</th><th>Format</th></tr>
+    <tr><td>Claude Code</td><td><code>~/.claude/projects/&lt;project&gt;/&lt;session&gt;.jsonl</code></td><td>One JSON object per line</td></tr>
+    <tr><td>Codex</td><td><code>~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl</code></td><td>JSON lines with <code>token_count</code> and <code>token_usage_record</code> events</td></tr>
+    <tr><td>GitHub Copilot CLI</td><td><code>~/.copilot/session-store.db</code></td><td>SQLite</td></tr>
+  </table></div>
+  <p>Claude Code reads <code>CLAUDE_CONFIG_DIR</code> and Codex reads <code>CODEX_HOME</code> if you have moved them.</p>
+</section>
+<section class="section">
+  <h2>What one Claude Code record contains</h2>
+  <p>Every assistant reply carries a <code>usage</code> object:</p>
+  <pre><code>"usage": {
+  "input_tokens": 2,
+  "cache_read_input_tokens": 44416,
+  "cache_creation_input_tokens": 28104,
+  "cache_creation": { "ephemeral_1h_input_tokens": 28104, "ephemeral_5m_input_tokens": 0 },
+  "output_tokens": 390
+}</code></pre>
+  <ul>
+    <li><code>input_tokens</code>: fresh input that was not cached.</li>
+    <li><code>cache_read_input_tokens</code>: context read from the cache, the cheapest kind.</li>
+    <li><code>cache_creation_input_tokens</code>: context written to the cache, split into 1-hour and 5-minute writes. After a cache miss this number jumps.</li>
+    <li><code>output_tokens</code>: what the model wrote, thinking included.</li>
+  </ul>
+  <p>Why the four are priced so differently is explained in <a href="/claude-code-cost/">how much Claude Code costs</a>.</p>
+</section>
+<section class="section">
+  <h2>Add it up with jq</h2>
+  <p>This totals every Claude Code reply on your machine. A reply can appear on more than one line, so it keeps one record per message id:</p>
+  <pre><code>cat ~/.claude/projects/*/*.jsonl \
+  | jq -c 'select(.type == "assistant" and .message.usage) | {id: .message.id, u: .message.usage}' \
+  | jq -s 'unique_by(.id) | map(.u) | {
+      turns: length,
+      input: (map(.input_tokens // 0) | add),
+      cache_read: (map(.cache_read_input_tokens // 0) | add),
+      cache_write: (map(.cache_creation_input_tokens // 0) | add),
+      output: (map(.output_tokens // 0) | add)}'</code></pre>
+  <p>It gives totals, not a timeline, and it does not price anything. For that, use a dashboard.</p>
+</section>
+<section class="section">
+  <h2>Codex and Copilot CLI</h2>
+  <p>Codex writes a <code>token_count</code> event after each turn. Besides token counts it records your rate limit windows, the 5-hour and the weekly one, with the percentage used and the reset time. Newer Codex versions add <code>token_usage_record</code> events. Codex counts cached tokens inside <code>input_tokens</code>, so subtract <code>cached_input_tokens</code> to get fresh input.</p>
+  <p>GitHub Copilot CLI keeps its sessions in a SQLite database. Its input count also includes cache reads.</p>
+</section>
+<section class="section">
+  <h2>All of it in one dashboard</h2>
+  <p>Tokenmeter reads all three sources and shows every prompt with its tokens split into cached, fresh and output, its cost, the cache misses, cost per git commit, and your usage windows. It runs on localhost and sends nothing anywhere.</p>
+  <pre><code>brew install serkankorkut/tap/tokenmeter
+tokenmeter start</code></pre>
+  <p>On Windows and Linux, <code>pipx install tokenmeter-dashboard</code>, or try it without installing: <code>uvx --from tokenmeter-dashboard tokenmeter --open</code>.</p>
+</section>
+<section class="section faq">
+  <h2>Questions</h2>
+  <h3>Where does Claude Code store token usage?</h3>
+  <p>In JSON lines files under <code>~/.claude/projects</code>, one file per session, grouped by project folder. Every assistant reply includes a <code>usage</code> object with its token counts.</p>
+  <h3>Does /usage show all my Claude Code sessions?</h3>
+  <p>The Session block covers the current session. On a subscription, the breakdown below it covers the last 24 hours or 7 days on this machine. For per-prompt history across weeks, read the logs or use Tokenmeter.</p>
+  <h3>How do I check Codex token usage?</h3>
+  <p>Codex logs each turn's token counts and your 5-hour and weekly limit windows to <code>~/.codex/sessions</code>. Tokenmeter reads them and shows the limits with their reset times.</p>
+  <h3>Can I track token usage for a whole team?</h3>
+  <p>Yes. Run one Tokenmeter as a team server and point each laptop at it with <code>--export</code>. Only token counts, models, project paths and timestamps are sent. Prompt text stays on each laptop.</p>
+</section>
+</div>
