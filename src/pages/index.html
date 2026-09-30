@@ -1,5 +1,5 @@
 <!-- title: Tokenmeter — Claude Code token usage and cost dashboard -->
-<!-- description: A free Claude Code usage monitor and cost tracker. Token usage and cost per prompt, cache misses, Codex usage limits and GitHub Copilot CLI, in one local dashboard. Nothing leaves your machine. -->
+<!-- description: Free Claude Code usage monitor and cost tracker for token monitoring and optimization: cost per prompt, cache misses, Codex limits and Copilot CLI, all local. -->
 <section class="hero">
   {{logo}}
   <p class="wordmark"><b>token</b>meter</p>
@@ -24,6 +24,11 @@
       <span id="cmd-linux-raw" hidden>pipx install tokenmeter-dashboard && tokenmeter start</span>
     </div>
     <p class="hint">Paste that in a terminal. Your dashboard opens at <code>http://127.0.0.1:7788</code> and keeps running in the background. <a href="/install/">Other ways to install</a></p>
+    <p class="badges">
+      <a href="https://pepy.tech/projects/tokenmeter-dashboard"><img src="https://img.shields.io/pepy/dt/tokenmeter-dashboard?label=downloads&style=flat-square&labelColor=15161A&color=E8702A" alt="Total downloads from PyPI" height="20"></a>
+      <a href="https://github.com/serkankorkut/homebrew-tap/releases"><img src="https://img.shields.io/github/downloads/serkankorkut/homebrew-tap/total?label=homebrew%20installs&style=flat-square&labelColor=15161A&color=E8702A" alt="Homebrew installs" height="20"></a>
+      <a href="https://pypi.org/project/tokenmeter-dashboard/"><img src="https://img.shields.io/pypi/v/tokenmeter-dashboard?label=version&style=flat-square&labelColor=15161A&color=E8702A" alt="Latest version on PyPI" height="20"></a>
+    </p>
   </div>
 </section>
 
@@ -129,6 +134,8 @@ tokenmeter {{version}}</pre></div>
   <p>The cached conversation expires after a break longer than its lifetime: one hour on a Claude subscription, five minutes on an API key. The next prompt then sends the whole context again at full price. Tokenmeter flags each cache miss with the prompt that caused it and what the re-write cost.</p>
   <h3>Is Tokenmeter a Claude Code usage monitor or a cost tracker?</h3>
   <p>Both. It monitors usage live, a few seconds after each prompt, with a context gauge for every running session so you see compaction coming. It tracks cost per prompt, per day, per project and per git commit, and can send a desktop alert when you cross a daily or monthly budget.</p>
+  <h3>How can I reduce Claude Code token usage?</h3>
+  <p>Find where the tokens go first. In Tokenmeter, sort prompts by cost, check the cache misses, and compare models and projects: most waste comes from cold sessions that re-send the whole context, long histories carried into unrelated tasks, and a large model doing routine work. Then clear or restart sessions between tasks and match the model to the job. Tokenmeter does not change what your agent sends; it shows you what to change. <a href="/claude-code-cost/#spend-less">Ways to spend less</a>.</p>
   <h3>How do I check my Codex usage limits?</h3>
   <p>Codex writes its 5-hour and weekly limits into every session log, with the percentage used and the reset time. Tokenmeter shows both windows as bars with a countdown. In Codex itself, <code>/status</code> shows the same numbers. <a href="/codex-usage-limits/">How Codex usage limits work</a>.</p>
   <h3>Does it work with Codex and GitHub Copilot CLI?</h3>

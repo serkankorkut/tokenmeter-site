@@ -74,6 +74,9 @@ nav a[aria-current] { text-decoration: underline; text-decoration-color: var(--a
 .copy:hover { background: #22252b; }
 .copy.done { color: var(--term-green); }
 .install .hint { color: var(--muted); font-size: 0.9rem; }
+.badges { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 0.25rem; }
+.badges a { line-height: 0; }
+.badges img { height: 20px; width: auto; border-radius: 3px; }
 
 .shot { max-width: 68rem; margin: 2.5rem auto 0; padding: 0 clamp(1rem, 4vw, 2rem); }
 .shot img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--rule); box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); }
